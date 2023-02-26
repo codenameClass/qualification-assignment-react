@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# Front-end Qualification Assignment
+
+App written in React
 
 ## Available Scripts
 
