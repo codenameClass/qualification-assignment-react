@@ -1,51 +1,78 @@
 import React, { useState } from "react";
+import { Chip, Autocomplete, TextField } from "@mui/material";
 
-function SocialSkills() {
-  const [skills, setSkills] = useState([]);
+function SocialSkillsTest({ socialSkillsOptions, personInput, onChange }) {
+  const [currentSkill, setCurrentSkill] = useState("");
 
   const handleInputChange = (event) => {
-    if (event.key === "Enter") {
-      const value = event.target.value;
-      setSkills((prevState) => [...prevState, value]);
-      event.target.value = "";
-    }
+    setCurrentSkill(event.target.value);
   };
 
-  const handleAddSkill = (event) => {
-    const value = event.target.previousSibling.value;
-    setSkills((prevState) => [...prevState, value]);
-    event.target.previousSibling.value = "";
+  const handleInputKeydown = (event) => {
+    if (event.key !== "Enter") return;
+
+    const value = event.target.value;
+
+    if (value === "") return;
+
+    onChange((prevState) => {
+      const newSkillsSet = new Set([...prevState.socialSkills, value]);
+      const newSkillsArray = Array.from(newSkillsSet);
+      return {
+        ...prevState,
+        socialSkills: newSkillsArray,
+      };
+    });
+
+    setCurrentSkill("");
+
   };
 
   const handleRemove = (indexToRemove) => {
-    setSkills((prevState) =>
-      prevState.filter((_, index) => index !== indexToRemove)
-    );
+    onChange((prevState) => ({
+      ...prevState,
+      ...{
+        socialSkills: prevState.socialSkills.filter(
+          (_, index) => index !== indexToRemove
+        ),
+      },
+    }));
   };
 
   return (
     <section>
       <output>
-        {skills.map((skill, index) => (
+        {personInput.socialSkills.map((skill, index) => (
           <span key={index}>
-            <span type="text">{skill}</span>
-            <button onClick={() => handleRemove(index)}>X</button>
+            <Chip
+              variant="outlined"
+              label={skill}
+              onDelete={() => handleRemove(index)}
+            />
           </span>
         ))}
       </output>
-      <input
-        type="text"
-        list="social-skills"
-        onKeyDown={handleInputChange}
+
+      <Autocomplete
+        freeSolo
+        options={socialSkillsOptions}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            id="skills"
+            placeholder="Enter skills..."
+            label="Skills"
+            margin="normal"
+            variant="standard"
+            sx={{ width: "50%" }}
+            value={currentSkill}
+            onChange={handleInputChange}
+            onKeyDown={handleInputKeydown}
+          />
+        )}
       />
-      <button onClick={handleAddSkill}>Add more</button>
-      <datalist id="social-skills">
-        <option value="social" />
-        <option value="fun" />
-        <option value="coach" />
-      </datalist>
     </section>
   );
 }
 
-export default SocialSkills;
+export default SocialSkillsTest;
