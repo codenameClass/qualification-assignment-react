@@ -1,6 +1,14 @@
+**Back-end: [QualificationAssignment](https://github.com/codenameClass/QualificationAssignment)**
+
+___
+
 # Front-end Qualification Assignment
 
 App written in React
+
+
+![Demo React Image](./demo_react.png)
+
 
 ## Available Scripts
 
