@@ -1,24 +1,23 @@
 import React, {useState} from 'react';
-import SocialAccounts from "./SocialAccounts";
-import SocialSkills from "./SocialSkills";
-import { TextField } from '@mui/material';
+
 import axios from 'axios';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import './Main.css';
-
-
+import { TextField } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+import './Main.css';
+
+import SocialAccounts from "./SocialAccounts";
+import SocialSkills from "./SocialSkills";
+
 
 function Main() {
 
     const [result, setResult] = useState('');
-
-    
 
     const handleAPIRequest = async (objectInput) => {
         const apiEndpoint = 'https://localhost:7237/people';
@@ -37,6 +36,7 @@ function Main() {
             setResult(getResult.data);
         } catch (error) {
             console.error(error);
+            alert(error.message);
         }
     };
 
@@ -85,6 +85,7 @@ function Main() {
             value={personInput.firstName}
             onChange={(e) => handleChangeInput('firstName', e.target.value)}
             sx={{ width: '50%' }}
+            required
             />
         <br />
         <TextField 
@@ -96,6 +97,7 @@ function Main() {
             value={personInput.lastName}
             onChange={(e) => handleChangeInput('lastName', e.target.value)}
             sx={{ width: '50%' }}
+            required
             />
 
         <SocialSkills
@@ -111,7 +113,6 @@ function Main() {
             />
 
         <br />
-        {/*<output>{JSON.stringify(personInput)}</output>*/}
         <Button variant="contained" onClick={(e) => handleAPIRequest(personInput)}>Make API Request</Button>
         {result && <section className="result-container">
             <Card className="card-container" sx={{ maxWidth: 345 }}>
